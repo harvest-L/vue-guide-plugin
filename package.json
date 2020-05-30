@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A Vue Guide Plgin",
   "author": "liupengfei <liupengfei@duiba.com.cn>",
-  "private": true,
   "main": "./dist/index.js",
   "keywords": ["新手引导", "蒙层引导", "driver", "guide-plugin"],
   "scripts": {

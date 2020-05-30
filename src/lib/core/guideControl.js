@@ -1,7 +1,7 @@
 /*
  * @Author: flyharvest
  * @Date: 2020-05-24 16:51:22
- * @LastEditTime: 2020-05-30 18:05:05
+ * @LastEditTime: 2020-05-30 18:41:06
  * @LastEditors: flyharvest
  */
 
@@ -40,7 +40,7 @@ export class GuideControl {
     })
 
     this.vue.$on('autoPlayChange', (value) => {
-      this.autoPlay = true
+      this.autoPlay = value
     })
 
     this.vue.$on('autoTimesChange', (value) => {
