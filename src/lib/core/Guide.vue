@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-24 15:59:23
- * @LastEditTime: 2020-05-30 18:01:20
+ * @LastEditTime: 2020-05-30 19:00:54
  * @LastEditors: flyharvest
 -->
 <template>
@@ -117,7 +117,6 @@ export default {
     getShape (shapeConfig) {
       if (this.focusEl) {
         let {top, left, width, height, bottom, right} = this.focusEl.getBoundingClientRect()
-        console.log(bottom)
         const userConfig = {...shapeConfig}
         if (userConfig.pad && typeof userConfig.pad === 'number') {
           const pad = Math.floor(userConfig.pad)
@@ -145,7 +144,6 @@ export default {
   watch: {
     shapeConfig: {
       handler () {
-        console.log(this.shapeConfig)
         this.$$event.$emit('shapeConfigChange', {...this.shapeConfig})
       },
       immediate: true

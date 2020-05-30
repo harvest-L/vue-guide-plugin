@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-25 16:53:28
- * @LastEditTime: 2020-05-30 17:38:19
+ * @LastEditTime: 2020-05-30 19:01:04
  * @LastEditors: flyharvest
 -->
 <template>
@@ -48,7 +48,6 @@ export default {
   watch: {
     shapeConfig: {
       handler () {
-        console.log(this.shapeConfig)
         this.$$event.$emit('shapeConfigChange', {...this.shapeConfig}, this.step)
       },
       immediate: true
