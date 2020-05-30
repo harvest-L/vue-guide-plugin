@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-24 15:23:41
- * @LastEditTime: 2020-05-30 19:03:25
+ * @LastEditTime: 2020-05-30 19:34:38
  * @LastEditors: flyharvest
 --> 
 # vue-guide-plugin
@@ -281,4 +281,5 @@ export default {
 
 > __对于位置随 聚焦元素变化的引导元素,应该通过 监听 shapePos 来计算绝对位置,参见例子的第二步引导__
 
-> __应该确保this.$guide.play()调用的时候,聚焦元素已经初始化渲染完毕__
+> __应该确保this.$guide.play()调用的时候,聚焦元素已经初始化渲染完毕__ 
+  * 特别注意, 当使用v-guide 和 v-if的时候. 由于v-if的指令权重较高, 并且当v-if的 值为false的时候, v-guide的bind 并不会执行, 也就没办法拿到 相应的el 和 step配置, 如果需要v-if 和 v-guide同时运行,最好的方式,应该是在外层包一层dom,以让 v-guide 消费.

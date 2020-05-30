@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-30 13:05:37
- * @LastEditTime: 2020-05-30 18:01:02
+ * @LastEditTime: 2020-05-30 19:12:15
  * @LastEditors: flyharvest
 -->
 <template>
@@ -14,7 +14,7 @@
     @end="guideEnd"
     @start="guideStart">
       <TuiaGuideStep
-        :step="2"
+        :step="3"
         :shapeConfig="{pad: 20}"
         @shapePos="step2PosChange">
         <div class="step2-button">我是第二步的引导按钮</div>
