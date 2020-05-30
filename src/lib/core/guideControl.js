@@ -1,7 +1,7 @@
 /*
  * @Author: flyharvest
  * @Date: 2020-05-24 16:51:22
- * @LastEditTime: 2020-05-27 20:14:22
+ * @LastEditTime: 2020-05-30 16:41:20
  * @LastEditors: flyharvest
  */
 
@@ -39,18 +39,12 @@ export class GuideControl {
       }
     })
 
-    this.vue.$on('autoPlay', (value, step) => {
-      let stepConfig = this.getStepConfig(step)
-      if (stepConfig) {
-        stepConfig.autoPlay = value
-      }
+    this.vue.$on('autoPlayChange', (value) => {
+      this.autoPlay = true
     })
 
-    this.vue.$on('autoTimes', (value, step) => {
-      let stepConfig = this.getStepConfig(step)
-      if (stepConfig) {
-        stepConfig.autoTimes = value
-      }
+    this.vue.$on('autoTimesChange', (value) => {
+      this.autoTimes = value
     })
   }
   _mixConfig (num) {
@@ -100,7 +94,7 @@ export class GuideControl {
   setShapeConfig (config, num) {
     const stepNum = num || this.step
     if (this.steps['step' + stepNum]) {
-      this.steps['step' + stepNum].skinConfig = config
+      this.steps['step' + stepNum].shapeConfig = config
     }
   }
   _next (num) {
@@ -113,12 +107,12 @@ export class GuideControl {
           this._next()
         }, stepConfig.autoTimes || this.autoTimes)
       }
-      this.vue.$emit('$stepChange', this._mixConfig(num))
+      this.vue.$emit('stepChange', this._mixConfig(num))
       this.vue.$nextTick(() => {
         this.isRender = false
       })
     } else {
-      this.vue.$emit('guideEnd')
+      this.vue.$emit('end')
     }
   }
   // 开始
@@ -126,7 +120,7 @@ export class GuideControl {
     if (this._started) {
       return
     }
-    this.vue.$emit('guideStart')
+    this.vue.$emit('start')
     // 防止step1还没创建，监听函数还没有准备好
     this.vue.$nextTick(() => {
       this._next(num)
@@ -137,7 +131,7 @@ export class GuideControl {
     this.add(config)
     if (this.step === config.step) {
       // this.vue.$emit('$stepChange', this.getStepConfig())
-      this.vue.$emit('$contentChange', this._mixConfig(config.step))
+      this.vue.$emit('contentChange', this._mixConfig(config.step))
     }
   }
 

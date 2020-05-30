@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-25 16:53:28
- * @LastEditTime: 2020-05-28 10:03:52
+ * @LastEditTime: 2020-05-30 17:38:19
  * @LastEditors: flyharvest
 -->
 <template>
@@ -11,7 +11,10 @@
 </template>
 
 <script >
+import eventMixin from './eventMixin.js'
+
 export default {
+  mixins: [ eventMixin ],
   props: {
     step: {
       type: Number | String,
@@ -27,7 +30,7 @@ export default {
     },
     shapeConfig: {
       type: Object,
-      defalut: {}
+      default: () => {}
     }
   },
   data () {
@@ -36,33 +39,36 @@ export default {
     }
   },
   created () {
+    this._setEventProxy('$$event')
     const step = this.$guide.getCurrentStep()
-    if (this.step === step) {
-      this.show = true
-    } else {
-      this.show = false
-    }
-    this.$$event.$on('$stepChange', (config) => {
-      this.$nextTick(() => {
-        if (config.step === this.step) {
-          this.show = true
-        } else {
-          this.show = false
-        }
-      })
-    })
-    this.$$event.$on('shapePos', (config) => {
-      if (config.step === this.step) {
-        this.$emit('shapePos', config.pos)
-      }
-    })
+    this.changeShow(step)
+    this._on('stepChange', this.handleStepChange)
+    this._on('shapePos', this.emitPos)
   },
   watch: {
     shapeConfig: {
       handler () {
+        console.log(this.shapeConfig)
         this.$$event.$emit('shapeConfigChange', {...this.shapeConfig}, this.step)
       },
       immediate: true
+    }
+  },
+  methods: {
+    changeShow (step) {
+      if (step === this.step) {
+        this.show = true
+      } else {
+        this.show = false
+      }
+    },
+    handleStepChange (config) {
+      this.changeShow(config.step)
+    },
+    emitPos (config) {
+      if (config.step === this.step) {
+        this.$emit('shapePos', config.pos)
+      }
     }
   }
 }
@@ -72,5 +78,7 @@ export default {
 .ff-step-content {
   position: absolute;
   z-index: 4;
+  width: 100%;
+  height: 100%;
 }
 </style>

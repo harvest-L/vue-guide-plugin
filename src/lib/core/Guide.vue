@@ -1,23 +1,24 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-24 15:59:23
- * @LastEditTime: 2020-05-28 10:03:24
+ * @LastEditTime: 2020-05-30 18:01:20
  * @LastEditors: flyharvest
 -->
 <template>
   <div id="vue-ff-guide" v-if="guideShow">
-    <div class="ff-guide-event-shape" @click="goNext"></div>
     <div class="ff-guide-focus-shape"
       :style="createShapeStyle"
       v-if="focusEl">
     </div>
-    <div class="ff-guide-extra">
+    <div class="ff-guide-extra" @click="goNext">
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
+import { isEqualObj } from './util'
+import eventMixin from './eventMixin'
 
 export default {
   props: {
@@ -31,9 +32,14 @@ export default {
     },
     shapeConfig: {
       type: Object,
-      defalut: {}
+      default: () => {}
+    },
+    clickNext: {
+      type: Boolean,
+      default: true
     }
   },
+  mixins: [eventMixin],
   data () {
     return {
       shape: null,
@@ -43,41 +49,16 @@ export default {
       shapePos: {}
     }
   },
+  created () {
+    this._setEventProxy('$$event')
+  },
   mounted () {
-    this.$$event.$on('show', () => {
-      this.resetScroll()
-      this.guideShow = false
-    })
-    this.$$event.$on('hide', () => {
-      this.resetScroll()
-      this.guideShow = false
-    })
-    this.$$event.$on('guideEnd', () => {
-      this.resetScroll()
-      this.guideShow = false
-    })
-    this.$$event.$on('$contentChange', (config) => {
-      this.step = config.step
-      this.focusEl = config.el
-      this.focusEl.scrollIntoView({
-        block: 'center'
-      })
-      const shapeConfig = Object.assign(config._shapeConfig, config.shapeConfig)
-      this.shape = this.getShape(shapeConfig || {})
-    })
-    this.$$event.$on('$stepChange', (config) => {
-      this.step = config.step
-      this.focusEl = config.el
-      this.focusEl.scrollIntoView({
-        block: 'center'
-      })
-      const shapeConfig = Object.assign(config._shapeConfig, config.shapeConfig)
-      this.shape = this.getShape(shapeConfig || {})
-    })
-    this.$$event.$on('guideStart', (config) => {
-      this.stopScroll()
-      this.guideShow = true
-    })
+    this._on('show', this.handleShow)
+    this._on('hide', this.handleHide)
+    this._on('contentChange', this.handleContentChange)
+    this._on('stepChange', this.handleStepChange)
+    this._on('start', this.handleStart)
+    this._on('end', this.handleEnd)
   },
   computed: {
     createShapeStyle () {
@@ -92,6 +73,41 @@ export default {
     }
   },
   methods: {
+    handleStart () {
+      this.handleShow()
+      this.$emit('start')
+    },
+    handleEnd () {
+      this.handleHide()
+      this.$emit('end')
+    },
+    handleShow () {
+      this.stopScroll()
+      this.guideShow = true
+    },
+    handleHide () {
+      this.resetScroll()
+      this.guideShow = false
+    },
+    handleContentChange (config) {
+      this.step = config.step
+      this.focusEl = config.el
+      this.focusEl.scrollIntoView({
+        block: 'center'
+      })
+      const shapeConfig = Object.assign(config._shapeConfig, config.shapeConfig)
+      this.shape = this.getShape(shapeConfig || {})
+    },
+    handleStepChange (config) {
+      this.step = config.step
+      this.focusEl = config.el
+      this.focusEl.scrollIntoView({
+        block: 'center'
+      })
+      const shapeConfig = Object.assign(config._shapeConfig, config.shapeConfig)
+      this.shape = this.getShape(shapeConfig || {})
+      this.$emit('stepChange', config.step)
+    },
     stopScroll () {
       document.documentElement.style.overflow = 'hidden'
     },
@@ -100,24 +116,30 @@ export default {
     },
     getShape (shapeConfig) {
       if (this.focusEl) {
-        let {top, left, width, height} = this.focusEl.getBoundingClientRect()
+        let {top, left, width, height, bottom, right} = this.focusEl.getBoundingClientRect()
+        console.log(bottom)
         const userConfig = {...shapeConfig}
         if (userConfig.pad && typeof userConfig.pad === 'number') {
           const pad = Math.floor(userConfig.pad)
           const pad2 = 2 * pad
-          top = top - pad
-          left = left - pad
+          top -= pad
+          left -= pad
           width += pad2
           height += pad2
+          bottom += pad
+          right += pad
           delete userConfig.pad
         }
-        this.shapePos = {width, height, left, top}
+        this.shapePos = {width, height, left, top, bottom, right}
         return Object.assign({top, left, width, height}, {...userConfig})
       }
       return {}
     },
     goNext () {
-      this.$guide.play()
+      this.$emit('layerClick')
+      if (this.clickNext) {
+        this.$guide.play()
+      }
     }
   },
   watch: {
@@ -129,7 +151,10 @@ export default {
       immediate: true
     },
     shapePos: {
-      handler () {
+      handler (newValue, oldValue) {
+        if (isEqualObj(newValue, oldValue)) {
+          return
+        }
         const playload = {
           pos: {...this.shapePos},
           step: this.$guide.getCurrentStep()
@@ -139,11 +164,17 @@ export default {
       },
       deep: true
     },
-    autoPlay () {
-      this.$$event.$emit('autoPlayChange', this.autoPlay)
+    autoPlay: {
+      handler (value) {
+        this.$$event.$emit('autoPlayChange', this.autoPlay)
+      },
+      immediate: true
     },
-    autoPlayTimes () {
-      this.$$event.$emit('autoPlayTimes', this.autoPlayTimes)
+    autoPlayTimes: {
+      handler (value) {
+        this.$$event.$emit('autoPlayTimes', this.autoPlayTimes)
+      },
+      immediate: true
     }
   }
 }
@@ -175,5 +206,7 @@ export default {
 .ff-guide-extra {
   position: absolute;
   z-index: 3;
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Author: flyharvest
  * @Date: 2020-05-24 15:23:41
- * @LastEditTime: 2020-05-28 09:59:50
+ * @LastEditTime: 2020-05-30 17:33:36
  * @LastEditors: flyharvest
  */
 // The Vue build version to load with the `import` command
@@ -9,7 +9,6 @@
 import Vue from 'vue'
 import App from './App'
 import VueGuidePlugin from './lib'
-console.log(VueGuidePlugin)
 Vue.use(VueGuidePlugin)
 Vue.config.productionTip = false
 

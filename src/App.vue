@@ -1,79 +1,59 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-24 15:23:41
- * @LastEditTime: 2020-05-28 10:06:50
+ * @LastEditTime: 2020-05-30 18:01:09
  * @LastEditors: flyharvest
 -->
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <div>
-      <button @click="haha">点我</button>
+    <div class="title">vue-guide-plugin</div>
+    <div v-guide.1>
+      <div class="sub-title">异步列表测试</div>
+      <div v-for="item in list" :key="item.id">{{item}}</div>
     </div>
-    <HelloWorld/>
-    <TuiaGuide
-      :shapeConfig="shape"
-      @shapePos="shapePos">
-      <TuiaGuideStep :step="1"
-        :shapeConfig="{background:'red'}"
-        @shapePos="step1ShapePos">
-        <div class="text">我是第一步的引导</div>
-      </TuiaGuideStep>
-      <TuiaGuideStep :step="2" :shapeConfig="{ pad: 10 }">
-        <div class="text">我是第二部的按钮</div>
-      </TuiaGuideStep>
-      <TuiaGuideStep :step="3" :shapeConfig="{ pad: 80 }">
-        <div class="text">我是第三部的按钮</div>
-      </TuiaGuideStep>
-      <TuiaGuideStep :step="4" >
-        <div class="text">我是第四步的按钮</div>
-      </TuiaGuideStep>
-      <TuiaGuideStep :step="5">
-        <div class="text">我是第5步的按钮</div>
-      </TuiaGuideStep>
-    </TuiaGuide>
+    <div>
+      <span v-guide.2>文字测试1111</span>
+      <span>文字测试</span>
+    </div>
+    <div style="height:200px;textAlign:center">间隔:200px</div>
+    <div style="marginTop: -40px" v-guide.3>负 margin-top: 40px</div>
+    <div class="box-wrapper">
+      <div class="box box1" v-guide.4>绝对定位的元素 left: 20, top: 10</div>
+      <div class="box box2" v-guide.5>transform的元素 x: 200, y: 200</div>
+      <div class="box box3" v-guide.6>scale: 1.2</div>
+    </div>
+    <div style="height: 1000px">我是一个很高的高度: 1000px</div>
+    <div>
+      <div v-guide.7>垂直滚动的测试</div>
+    </div>
+    <Guide></Guide>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
+import Guide from './components/Guide'
 export default {
   name: 'App',
+  components: {
+    Guide
+  },
   data () {
     return {
-      shape: {
-        borderRadius: '20px',
-        border: '1px solid red'
-        // padding: '20px'
-      }
+      list: []
     }
-  },
-  components: {
-    HelloWorld
   },
   mounted () {
-    this.$nextTick(() => {
-      // this.$guide.play()
-      // this.$guide.$on('$stepChange', () => {
-      //   console.log(this.$guide.getCurrentStep())
-      // })
-    })
+    this.$guide.play()
+    setTimeout(() => {
+      for (let i = 0; i < 10; i++) {
+        this.list.push({
+          item: i,
+          id: i
+        })
+      }
+    }, 5000)
   },
   methods: {
-    haha () {
-      // console.log('下一步')
-      this.$guide.play()
-      this.$guide.autoPlay = true
-    },
-    shapePos (config) {
-      console.log('监听到位置变化了')
-      console.log(config)
-    },
-    step1ShapePos (pos) {
-      console.log('step监听到位置变化了')
-      console.log(pos)
-    }
   }
 }
 </script>
@@ -90,8 +70,29 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.text {
+.title {
+  font-size: 40px;
+  font-weight: 700;
+}
+.box-wrapper {
+  position: relative;
+}
+.box {
+  width: 100px;
+  height: 100px;
+}
+.box1 {
+  position: absolute;
+  bottom: -200px;
+  right: 100px;
+  background: coral;
+}
+.box2 {
+  transform: translate(50px, 250px);
   background: red;
-  color: white
+}
+.box3 {
+  transform: scale(1.3);
+  background: blue;
 }
 </style>
