@@ -1,13 +1,13 @@
 /*
  * @Author: flyharvest
  * @Date: 2020-05-24 15:27:29
- * @LastEditTime: 2020-05-26 17:07:10
+ * @LastEditTime: 2020-05-30 18:11:03
  * @LastEditors: flyharvest
  */
 import Guide from './core/Guide'
 import Step from './core/Step'
 
-import {GuideControl} from './core/guideControl'
+import { GuideControl } from './core/guideControl.js'
 
 export default {
   install (Vue, options) {
@@ -25,11 +25,11 @@ export default {
         })
       },
       componentUpdated (el, binding) {
-        let raw = binding.rawName
-        let step = raw.split('.')[1]
         if (guide.isRender) {
           return
         }
+        let raw = binding.rawName
+        let step = raw.split('.')[1]
         guide._update({
           step: Number(step),
           el: el

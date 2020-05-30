@@ -1,7 +1,7 @@
 /*
  * @Author: flyharvest
  * @Date: 2020-05-26 14:43:52
- * @LastEditTime: 2020-05-28 09:58:03
+ * @LastEditTime: 2020-05-30 18:12:04
  * @LastEditors: flyharvest
  */ 
 'use strict'
@@ -41,7 +41,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('lib')]
+        include: [resolve('src')]
       }
     ]
   },
