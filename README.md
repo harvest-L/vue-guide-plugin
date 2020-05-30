@@ -1,7 +1,7 @@
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-24 15:23:41
- * @LastEditTime: 2020-05-30 18:00:13
+ * @LastEditTime: 2020-05-30 19:03:25
  * @LastEditors: flyharvest
 --> 
 # vue-guide-plugin
@@ -280,3 +280,5 @@ export default {
 > __shapeConfig中支持 pad: number 和 padding不同的是会将其计算到 width, height, left, bottom, top, right 保证 聚焦元素处于居中位置__
 
 > __对于位置随 聚焦元素变化的引导元素,应该通过 监听 shapePos 来计算绝对位置,参见例子的第二步引导__
+
+> __应该确保this.$guide.play()调用的时候,聚焦元素已经初始化渲染完毕__

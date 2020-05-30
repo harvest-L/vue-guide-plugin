@@ -1,10 +1,11 @@
 {
   "name": "vue-guide-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Vue Guide Plgin",
   "author": "liupengfei <liupengfei@duiba.com.cn>",
   "main": "./dist/index.js",
   "keywords": ["新手引导", "蒙层引导", "driver", "guide-plugin"],
+  "git": "https://github.com/harvest-L/vue-guide-plugin",
   "scripts": {
     "test": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
