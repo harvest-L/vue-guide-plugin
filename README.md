@@ -10,7 +10,7 @@
 
 ## 安装
 
-```
+```bash
 npm i vue-guide-plugin
 或
 // 使用github
@@ -20,7 +20,7 @@ npm i vue-guide-plugin
 
 ## 用法
 
-```
+```vue
 import VueGuidePlugin from 'vue-guide-plugin'
 
 Vue.use(VueGuidePlugin)
@@ -34,7 +34,7 @@ Vue.use(VueGuidePlugin)
 ## 例子
 
 App组件
-```
+```vue
 <template>
   <div id="app">
     <div class="title">vue-guide-plugin</div>
@@ -132,7 +132,7 @@ export default {
 ```
 
 Guide 组件
-```
+```vue
 <!--
  * @Author: flyharvest
  * @Date: 2020-05-30 13:05:37
